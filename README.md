@@ -128,4 +128,8 @@ O projeto tem como finalidade facilitar o agendamento de serviços para pets em 
 
 ---
 
+## 🎥 Screamcast
+
+## Veja um vídeo de demonstração do projeto: [Assista no YouTube](https://youtu.be/70ARcrTbTS4)
+
 📌 **Este documento será atualizado conforme o desenvolvimento do projeto.**
