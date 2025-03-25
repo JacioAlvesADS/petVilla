@@ -15,47 +15,87 @@ O projeto tem como finalidade facilitar o agendamento de serviços para pets em 
 
 ---
 
-## ✅ Critérios de Aceitação
+## 📌 Histórias de Usuário
 
 ### 1️⃣ Cadastro de Dono e Pet
+
+**Como dono de um pet, quero me cadastrar no sistema com meus dados pessoais e os do meu pet, para poder agendar serviços.**
+
+**Critérios de Aceitação:**
 
 - O sistema deve permitir o cadastro do dono do pet com nome, e-mail, telefone e endereço.
 - O sistema deve permitir o cadastro do pet com nome, espécie, raça, idade e histórico médico (opcional).
 - O sistema deve armazenar os dados cadastrados de forma segura.
 
+---
+
 ### 2️⃣ Agendamento de Serviços
+
+**Como cliente, quero agendar um serviço para meu pet, para garantir um horário disponível.**
+
+**Critérios de Aceitação:**
 
 - O sistema deve permitir que o cliente selecione um serviço disponível.
 - O cliente deve escolher uma data e horário dentro dos disponíveis no sistema.
 - O sistema deve validar a disponibilidade do serviço e do horário antes da confirmação.
 - O cliente deve receber uma confirmação do agendamento via e-mail ou mensagem no sistema.
 
+---
+
 ### 3️⃣ Visualização de Agendamentos
+
+**Como cliente, quero visualizar meus agendamentos, para acompanhar os serviços do meu pet.**
+
+**Critérios de Aceitação:**
 
 - O sistema deve exibir uma lista dos agendamentos do cliente.
 - Cada agendamento deve exibir a data, horário, serviço agendado e status.
 - O cliente deve conseguir filtrar os agendamentos por período (passados, futuros, todos).
 
+---
+
 ### 4️⃣ Acompanhamento do Status do Serviço
 
-- O sistema deve exibir o status do serviço ("Aguardando atendimento", "Em andamento", "Finalizado").
+**Como cliente, quero acompanhar o status do serviço do meu pet em tempo real, para saber em que etapa ele está.**
+
+**Critérios de Aceitação:**
+
+- O sistema deve exibir o status do serviço (ex.: "Aguardando atendimento", "Em andamento", "Finalizado").
 - O status deve ser atualizado em tempo real conforme a evolução do serviço.
-- O sistema deve permitir a visualização do status pelo cliente a qualquer momento.
+- O sistema deve permitir a visualização do status pelo cliente em qualquer momento.
+
+---
 
 ### 5️⃣ Cancelamento de Agendamento
+
+**Como cliente, gostaria de cancelar um agendamento, para liberar o horário.**
+
+**Critérios de Aceitação:**
 
 - O sistema deve permitir que o cliente visualize seus agendamentos e selecione um para cancelar.
 - O cancelamento só deve ser permitido dentro do prazo definido pelas regras do petshop.
 - O sistema deve atualizar a disponibilidade do horário cancelado para outros clientes.
 
-### 6️⃣ Gerenciamento de Serviços (Admin)
+---
+
+### 6️⃣ Gerenciamento de Serviços
+
+**Como administrador do petshop, quero cadastrar e atualizar serviços oferecidos, para manter o sistema atualizado.**
+
+**Critérios de Aceitação:**
 
 - O sistema deve permitir o cadastro de novos serviços, incluindo nome, descrição, preço e duração.
 - O sistema deve permitir a edição de serviços existentes, incluindo alteração de valores e disponibilidade.
 - O sistema deve impedir a exclusão de serviços com agendamentos futuros.
 - As alterações devem ser refletidas imediatamente para os clientes.
 
+---
+
 ### 7️⃣ Consulta de Agendamentos por Funcionários
+
+**Como funcionário do petshop, quero consultar os agendamentos do dia, para organização do trabalho.**
+
+**Critérios de Aceitação:**
 
 - O sistema deve exibir uma lista dos agendamentos do dia, ordenados por horário.
 - Cada agendamento deve conter informações sobre o pet, o cliente e o serviço agendado.
