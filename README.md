@@ -176,8 +176,12 @@ _Diagrama mostra as relações entre Dono, Pet, Serviço, Agendamento e as class
 
 ---
 
-## 🎥 Screamcast
+## 🎥 Screencast
 
-## Veja um vídeo de demonstração do projeto: [Assista no YouTube](https://youtu.be/70ARcrTbTS4)
+## Veja um vídeo de demonstração da prototipação do projeto: [Assista no YouTube](https://youtu.be/70ARcrTbTS4)
+
+## Veja também o andamento do projeto no sistema:
+
+[Assista no Youtube](https://youtu.be/wQYGl43RW9c)
 
 📌 **Este documento será atualizado conforme o desenvolvimento do projeto.**
