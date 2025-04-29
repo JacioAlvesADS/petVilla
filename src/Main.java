@@ -2,6 +2,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
+
 import model.Dono;
 import model.Pet;
 import service.CadastroService;
@@ -11,23 +12,49 @@ public class Main {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ServicoManager servicoManager = new ServicoManager();
-        int opcao;
 
+        int opcaoPrincipal;
         do {
             System.out.println("\n🐾 Sistema de Agendamento - Petshop 🐾");
-            System.out.println("1 - Cadastrar Dono");
-            System.out.println("2 - Cadastrar Pet");
-            System.out.println("3 - Listar Donos");
-            System.out.println("4 - Listar Pets");
-            System.out.println("5 - Cadastrar Serviço");
-            System.out.println("6 - Editar Serviço");
-            System.out.println("7 - Excluir Serviço");
-            System.out.println("8 - Listar Serviços");
-            System.out.println("9 - Agendar Serviço");
+            System.out.println("1 - Acesso como Cliente");
+            System.out.println("2 - Acesso como Funcionário/Admin");
             System.out.println("0 - Sair");
             System.out.print("Escolha uma opção: ");
+            opcaoPrincipal = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcaoPrincipal) {
+                case 1:
+                    menuCliente(scanner, servicoManager);
+                    break;
+                case 2:
+                    menuFuncionario(scanner, servicoManager);
+                    break;
+                case 0:
+                    System.out.println("👋 Saindo...");
+                    break;
+                default:
+                    System.out.println("❌ Opção inválida.");
+            }
+
+        } while (opcaoPrincipal != 0);
+
+        scanner.close();
+    }
+
+    public static void menuCliente(Scanner scanner, ServicoManager servicoManager) {
+        int opcao;
+        do {
+            System.out.println("\n👤 Menu Cliente");
+            System.out.println("1 - Cadastrar Tutor");
+            System.out.println("2 - Cadastrar Pet");
+            System.out.println("3 - Listar Tutores");
+            System.out.println("4 - Listar Pets");
+            System.out.println("5 - Agendar Serviço");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
-            scanner.nextLine(); // quebra de linha
+            scanner.nextLine();
 
             switch (opcao) {
                 case 1:
@@ -66,6 +93,53 @@ public class Main {
                     break;
 
                 case 5:
+                    System.out.print("Nome do Serviço para Agendamento: ");
+                    String servicoAgendar = scanner.nextLine();
+
+                    System.out.print("Nome do Tutor: ");
+                    String donoAgendamento = scanner.nextLine();
+
+                    System.out.print("Nome do Pet: ");
+                    String petAgendamento = scanner.nextLine();
+
+                    System.out.print("Data e Hora (dd/MM/yyyy HH:mm): ");
+                    String dataHoraStr = scanner.nextLine().trim();
+
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, formatter);
+
+                        servicoManager.adicionarAgendamento(servicoAgendar, donoAgendamento, petAgendamento, dataHora);
+                    } catch (DateTimeParseException e) {
+                        System.out.println("❌ Data/Hora inválida. Use o formato: dd/MM/yyyy HH:mm");
+                    }
+                    break;
+
+                case 0:
+                    break;
+
+                default:
+                    System.out.println("❌ Opção inválida.");
+            }
+
+        } while (opcao != 0);
+    }
+
+    public static void menuFuncionario(Scanner scanner, ServicoManager servicoManager) {
+        int opcao;
+        do {
+            System.out.println("\n🛠️ Menu Funcionário/Admin");
+            System.out.println("1 - Cadastrar Serviço");
+            System.out.println("2 - Editar Serviço");
+            System.out.println("3 - Excluir Serviço");
+            System.out.println("4 - Listar Serviços");
+            System.out.println("0 - Voltar");
+            System.out.print("Escolha uma opção: ");
+            opcao = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcao) {
+                case 1:
                     System.out.print("Nome do Serviço: ");
                     String nomeServico = scanner.nextLine();
                     System.out.print("Descrição: ");
@@ -78,7 +152,7 @@ public class Main {
                     servicoManager.cadastrarServico(nomeServico, descricao, preco, duracao);
                     break;
 
-                case 6:
+                case 2:
                     System.out.print("Nome do Serviço a Editar: ");
                     String nomeEditar = scanner.nextLine();
                     System.out.print("Novo Preço (R$): ");
@@ -89,44 +163,23 @@ public class Main {
                     servicoManager.editarServico(nomeEditar, novoPreco, novaDuracao);
                     break;
 
-                case 7:
+                case 3:
                     System.out.print("Nome do Serviço a Excluir: ");
                     String nomeExcluir = scanner.nextLine();
                     servicoManager.excluirServico(nomeExcluir);
                     break;
 
-                case 8:
+                case 4:
                     servicoManager.listarServicos();
                     break;
 
-                case 9:
-                System.out.print("Nome do Serviço para Agendamento: ");
-                String servicoAgendar = scanner.nextLine();
-    
-                System.out.print("Nome do Dono: ");
-                String donoAgendamento = scanner.nextLine();
-
-                System.out.print("Nome do Pet: ");
-                String petAgendamento = scanner.nextLine();
-
-                System.out.print("Data e Hora (dd/MM/yyyy HH:mm): ");
-                String dataHoraStr = scanner.nextLine().trim();
-
-    try {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, formatter);
-
-        servicoManager.adicionarAgendamento(servicoAgendar, donoAgendamento, petAgendamento, dataHora);
-    } catch (DateTimeParseException e) {
-        System.out.println("❌ Data/Hora inválida. Use o formato: dd/MM/yyyy HH:mm");
-    }
-    break;
+                case 0:
+                    break;
 
                 default:
-                    System.out.println("⚠️ Opção inválida.");
+                    System.out.println("❌ Opção inválida.");
             }
-        } while (opcao != 0);
 
-        scanner.close();
+        } while (opcao != 0);
     }
 }
