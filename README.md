@@ -52,13 +52,13 @@ _Diagrama mostra as relações entre Dono, Pet, Serviço, Agendamento e as class
 
 ### 3️⃣ Visualização de Agendamentos
 
-**Como cliente, quero visualizar meus agendamentos, para acompanhar os serviços do meu pet.**
+**Como administrador, quero visualizar todos os agendamentos cadastrados, para acompanhar os serviços dos pets.**
 
 **Critérios de Aceitação:**
 
-- O sistema deve exibir uma lista dos agendamentos do cliente.
+- O sistema deve exibir uma lista de todos os serviços.
 - Cada agendamento deve exibir a data, horário, serviço agendado e status.
-- O cliente deve conseguir filtrar os agendamentos por período (passados, futuros, todos).
+- O sistema deve exibir todos os agendamentos para os serviços cadastrados.
 
 ---
 
@@ -146,7 +146,7 @@ _Diagrama mostra as relações entre Dono, Pet, Serviço, Agendamento e as class
 
 #### 🟢 Visualizar todos os agendamentos
 
-**Dado** que um cliente deseja acompanhar seus agendamentos\
+**Dado** que um administrador deseja acompanhar os agendamentos dos serviços\
 **Quando** ele acessa a seção de agendamentos\
 **Então** o sistema exibe uma lista com data, horário, serviço e status.
 
