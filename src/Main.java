@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import model.Dono;
 import model.Pet;
+import model.StatusServico;
 import service.CadastroService;
 import service.ServicoManager;
 
