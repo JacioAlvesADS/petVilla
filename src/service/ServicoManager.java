@@ -4,6 +4,7 @@ import database.BancoDados;
 import java.time.LocalDateTime;
 import model.Agendamento;
 import model.Servico;
+import model.StatusServico;
 
 public class ServicoManager {
 
@@ -15,6 +16,34 @@ public class ServicoManager {
         BancoDados.servicos.add(new Servico(nome, descricao, preco, duracaoMinutos));
         System.out.println("✅ Serviço cadastrado com sucesso!");
     }
+
+    public void atualizarStatusAgendamento(String nomeDono, String nomePet, LocalDateTime dataHora, StatusServico novoStatus) {
+    for (Agendamento agendamento : BancoDados.agendamentos) {
+        if (agendamento.getNomeDono().equalsIgnoreCase(nomeDono) &&
+            agendamento.getNomePet().equalsIgnoreCase(nomePet) &&
+            agendamento.getDataHora().equals(dataHora)) {
+            agendamento.setStatus(novoStatus);
+            System.out.println("✅ Status atualizado com sucesso!");
+            return;
+        }
+    }
+    System.out.println("❌ Agendamento não encontrado.");
+}
+
+    public void consultarStatusAgendamento(String nomeDono, String nomePet) {
+        boolean encontrou = false;
+        System.out.println("\n📋 Status dos Agendamentos:");
+        for (Agendamento agendamento : BancoDados.agendamentos) {
+            if (agendamento.getNomeDono().equalsIgnoreCase(nomeDono) &&
+                agendamento.getNomePet().equalsIgnoreCase(nomePet)) {
+                System.out.println(agendamento);
+                encontrou = true;
+        }
+    }
+            if (!encontrou) {
+                System.out.println("❌ Nenhum agendamento encontrado para este dono e pet.");
+    }
+}
 
     public void editarServico(String nome, double novoPreco, int novaDuracao) {
         for (Servico s : BancoDados.servicos) {
