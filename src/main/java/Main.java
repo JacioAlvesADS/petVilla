@@ -52,6 +52,7 @@ public class Main {
             System.out.println("3 - Listar Tutores");
             System.out.println("4 - Listar Pets");
             System.out.println("5 - Agendar Serviço");
+            System.out.println("6 - Consultar Status do Agendamento");
             System.out.println("0 - Voltar");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
@@ -96,24 +97,28 @@ public class Main {
                 case 5:
                     System.out.print("Nome do Serviço para Agendamento: ");
                     String servicoAgendar = scanner.nextLine();
-
                     System.out.print("Nome do Tutor: ");
                     String donoAgendamento = scanner.nextLine();
-
                     System.out.print("Nome do Pet: ");
                     String petAgendamento = scanner.nextLine();
-
                     System.out.print("Data e Hora (dd/MM/yyyy HH:mm): ");
                     String dataHoraStr = scanner.nextLine().trim();
 
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                         LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, formatter);
-
                         servicoManager.adicionarAgendamento(servicoAgendar, donoAgendamento, petAgendamento, dataHora);
                     } catch (DateTimeParseException e) {
                         System.out.println("❌ Data/Hora inválida. Use o formato: dd/MM/yyyy HH:mm");
                     }
+                    break;
+
+                case 6:
+                    System.out.print("Nome do Tutor: ");
+                    String donoConsulta = scanner.nextLine();
+                    System.out.print("Nome do Pet: ");
+                    String petConsulta = scanner.nextLine();
+                    servicoManager.consultarStatusAgendamento(donoConsulta, petConsulta);
                     break;
 
                 case 0:
@@ -134,6 +139,7 @@ public class Main {
             System.out.println("2 - Editar Serviço");
             System.out.println("3 - Excluir Serviço");
             System.out.println("4 - Listar Serviços");
+            System.out.println("5 - Atualizar Status do Agendamento");
             System.out.println("0 - Voltar");
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
@@ -172,6 +178,46 @@ public class Main {
 
                 case 4:
                     servicoManager.listarServicos();
+                    break;
+
+                case 5:
+                    System.out.print("Nome do Tutor: ");
+                    String donoStatus = scanner.nextLine();
+                    System.out.print("Nome do Pet: ");
+                    String petStatus = scanner.nextLine();
+                    System.out.print("Data e Hora do Agendamento (dd/MM/yyyy HH:mm): ");
+                    String dataHoraStatus = scanner.nextLine();
+
+                    System.out.println("\nEscolha o novo status:");
+                    System.out.println("1 - Aguardando atendimento");
+                    System.out.println("2 - Em andamento");
+                    System.out.println("3 - Finalizado");
+                    int statusChoice = scanner.nextInt();
+                    scanner.nextLine();
+
+                    StatusServico novoStatus;
+                    switch (statusChoice) {
+                        case 1:
+                            novoStatus = StatusServico.AGUARDANDO_ATENDIMENTO;
+                            break;
+                        case 2:
+                            novoStatus = StatusServico.EM_ANDAMENTO;
+                            break;
+                        case 3:
+                            novoStatus = StatusServico.FINALIZADO;
+                            break;
+                        default:
+                            System.out.println("❌ Opção inválida.");
+                            continue;
+                    }
+
+                    try {
+                        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+                        LocalDateTime dataHora = LocalDateTime.parse(dataHoraStatus, formatter);
+                        servicoManager.atualizarStatusAgendamento(donoStatus, petStatus, dataHora, novoStatus);
+                    } catch (DateTimeParseException e) {
+                        System.out.println("❌ Data/Hora inválida. Use o formato: dd/MM/yyyy HH:mm");
+                    }
                     break;
 
                 case 0:
