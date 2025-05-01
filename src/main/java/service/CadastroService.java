@@ -7,7 +7,7 @@ import database.BancoDados;
 public class CadastroService {
     public static void cadastrarDono(Dono dono) {
         BancoDados.donos.add(dono);
-        System.out.println("✅ Dono cadastrado com sucesso!");
+        System.out.println("✅ Tutor cadastrado com sucesso!");
     }
 
     public static void cadastrarPet(Pet pet) {

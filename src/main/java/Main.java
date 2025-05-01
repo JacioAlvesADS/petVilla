@@ -3,6 +3,7 @@ import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.Scanner;
 
+import database.BancoDados;
 import model.Dono;
 import model.Pet;
 import model.StatusServico;
@@ -85,7 +86,7 @@ public class Main {
                     String endereco = scanner.nextLine();
                     CadastroService.cadastrarDono(new Dono(nome, email, telefone, endereco));
                     System.out.println("\nPressione Enter para continuar...");
-                    scanner.nextLine();  // <— pausa para ler a mensagem
+                    scanner.nextLine(); // <— pausa para ler a mensagem
                     break;
 
                 case 2:
@@ -102,7 +103,7 @@ public class Main {
                     String historico = scanner.nextLine();
                     CadastroService.cadastrarPet(new Pet(nomePet, especie, raca, idade, historico));
                     System.out.println("\nPressione Enter para continuar...");
-                    scanner.nextLine();  // <— pausa para ler a mensagem
+                    scanner.nextLine(); // <— pausa para ler a mensagem
                     break;
 
                 case 3:
@@ -114,34 +115,65 @@ public class Main {
                 case 4:
                     CadastroService.listarPets();
                     System.out.println("\nPressione Enter para continuar...");
-                    scanner.nextLine();  // pausa para o usuário ler
+                    scanner.nextLine(); // pausa para o usuário ler
                     break;
 
                 case 5:
-                    System.out.print("Nome do Serviço para Agendamento: ");
-                    String servicoAgendar = scanner.nextLine();
+                    if (BancoDados.servicos.isEmpty()) {
+                        System.out.println("⚠️ Nenhum serviço disponível para agendamento.");
+                        System.out.println("\nPressione Enter para continuar...");
+                        scanner.nextLine();
+                        break;
+                    }
+
+                    System.out.println("\n📋 Serviços disponíveis:");
+                    for (int i = 0; i < BancoDados.servicos.size(); i++) {
+                        System.out.println((i + 1) + " - " + BancoDados.servicos.get(i));
+                    }
+
+                    System.out.print("\nEscolha o número do serviço: ");
+                    int indiceServico = scanner.nextInt();
+                    scanner.nextLine(); // consumir quebra de linha
+
+                    // Validação
+                    if (indiceServico < 1 || indiceServico > BancoDados.servicos.size()) {
+                        System.out.println("❌ Número inválido.");
+                        System.out.println("\nPressione Enter para continuar...");
+                        scanner.nextLine();
+                        break;
+                    }
+
+                    String nomeServicoEscolhido = BancoDados.servicos.get(indiceServico - 1).getNome();
+
+                    // Dados do agendamento
                     System.out.print("Nome do Tutor: ");
                     String donoAgendamento = scanner.nextLine();
+
                     System.out.print("Nome do Pet: ");
                     String petAgendamento = scanner.nextLine();
+
                     System.out.print("Data e Hora (dd/MM/yyyy HH:mm): ");
                     String dataHoraStr = scanner.nextLine().trim();
 
                     try {
                         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
                         LocalDateTime dataHora = LocalDateTime.parse(dataHoraStr, formatter);
-                        servicoManager.adicionarAgendamento(servicoAgendar, donoAgendamento, petAgendamento, dataHora);
+
+                        servicoManager.adicionarAgendamento(nomeServicoEscolhido, donoAgendamento, petAgendamento,
+                                dataHora);
+                        System.out.println("\n✅ Agendamento feito com sucesso!");
                     } catch (DateTimeParseException e) {
                         System.out.println("❌ Data/Hora inválida. Use o formato: dd/MM/yyyy HH:mm");
                     }
+
+                    System.out.println("\nPressione Enter para continuar...");
+                    scanner.nextLine();
                     break;
 
                 case 6:
-                    System.out.print("Nome do Tutor: ");
-                    String donoConsulta = scanner.nextLine();
-                    System.out.print("Nome do Pet: ");
-                    String petConsulta = scanner.nextLine();
-                    servicoManager.consultarStatusAgendamento(donoConsulta, petConsulta);
+                    servicoManager.listarAgendamentosComStatus();
+                    System.out.println("\nPressione Enter para continuar...");
+                    scanner.nextLine();
                     break;
 
                 case 0:
@@ -257,7 +289,5 @@ public class Main {
     }
 }
 
+// o menu cliente esta perfeito, porem o menu funcionario/Admin tem muitas coisas para melhorar:
 
-// O consultar status deveria listar em ordem numerica para o usuario escolher qual servico quer alterar o status. Depois disso, ele deveria perguntar o novo status
-
-// ao agendar um servico, ele deveria listar os servicos para o usuario selecionar e depois perguntar o dono e o pet. Pois basicamente o sistema permite que eu possa agendar um servico que nao existe, o que eh um erro. Alem disso, ele nao da o feedback de que o servico foi agendado com sucesso.

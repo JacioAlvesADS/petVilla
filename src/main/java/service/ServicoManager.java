@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import model.Agendamento;
 import model.Servico;
 import model.StatusServico;
+import java.time.format.DateTimeFormatter;
 
 public class ServicoManager {
 
@@ -17,33 +18,34 @@ public class ServicoManager {
         System.out.println("✅ Serviço cadastrado com sucesso!");
     }
 
-    public void atualizarStatusAgendamento(String nomeDono, String nomePet, LocalDateTime dataHora, StatusServico novoStatus) {
-    for (Agendamento agendamento : BancoDados.agendamentos) {
-        if (agendamento.getNomeDono().equalsIgnoreCase(nomeDono) &&
-            agendamento.getNomePet().equalsIgnoreCase(nomePet) &&
-            agendamento.getDataHora().equals(dataHora)) {
-            agendamento.setStatus(novoStatus);
-            System.out.println("✅ Status atualizado com sucesso!");
-            return;
+    public void atualizarStatusAgendamento(String nomeDono, String nomePet, LocalDateTime dataHora,
+            StatusServico novoStatus) {
+        for (Agendamento agendamento : BancoDados.agendamentos) {
+            if (agendamento.getNomeDono().equalsIgnoreCase(nomeDono) &&
+                    agendamento.getNomePet().equalsIgnoreCase(nomePet) &&
+                    agendamento.getDataHora().equals(dataHora)) {
+                agendamento.setStatus(novoStatus);
+                System.out.println("✅ Status atualizado com sucesso!");
+                return;
+            }
         }
+        System.out.println("❌ Agendamento não encontrado.");
     }
-    System.out.println("❌ Agendamento não encontrado.");
-}
 
     public void consultarStatusAgendamento(String nomeDono, String nomePet) {
         boolean encontrou = false;
         System.out.println("\n📋 Status dos Agendamentos:");
         for (Agendamento agendamento : BancoDados.agendamentos) {
             if (agendamento.getNomeDono().equalsIgnoreCase(nomeDono) &&
-                agendamento.getNomePet().equalsIgnoreCase(nomePet)) {
+                    agendamento.getNomePet().equalsIgnoreCase(nomePet)) {
                 System.out.println(agendamento);
                 encontrou = true;
+            }
+        }
+        if (!encontrou) {
+            System.out.println("❌ Nenhum agendamento encontrado para este dono e pet.");
         }
     }
-            if (!encontrou) {
-                System.out.println("❌ Nenhum agendamento encontrado para este dono e pet.");
-    }
-}
 
     public void editarServico(String nome, double novoPreco, int novaDuracao) {
         for (Servico s : BancoDados.servicos) {
@@ -61,7 +63,7 @@ public class ServicoManager {
         for (Servico s : BancoDados.servicos) {
             if (s.getNome().equalsIgnoreCase(nome)) {
                 boolean temAgendamentos = BancoDados.agendamentos.stream()
-                    .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(nome));
+                        .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(nome));
                 if (temAgendamentos) {
                     System.out.println("❌ Este serviço possui agendamentos futuros e não pode ser excluído.");
                     return;
@@ -82,12 +84,12 @@ public class ServicoManager {
             for (Servico s : BancoDados.servicos) {
                 System.out.println(s);
                 boolean temAgendamentos = BancoDados.agendamentos.stream()
-                    .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()));
+                        .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()));
                 if (temAgendamentos) {
                     System.out.println("🔔 Agendamentos:");
                     BancoDados.agendamentos.stream()
-                        .filter(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()))
-                        .forEach(a -> System.out.println("   - " + a));
+                            .filter(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()))
+                            .forEach(a -> System.out.println("   - " + a));
                 } else {
                     System.out.println("   (Sem agendamentos)");
                 }
@@ -95,16 +97,33 @@ public class ServicoManager {
         }
     }
 
-    public void adicionarAgendamento(String nomeServico, String nomeDono, String nomePet, LocalDateTime dataHora) {
+    public boolean adicionarAgendamento(String nomeServico, String nomeDono, String nomePet, LocalDateTime dataHora) {
         boolean servicoExiste = BancoDados.servicos.stream()
                 .anyMatch(s -> s.getNome().equalsIgnoreCase(nomeServico));
 
         if (!servicoExiste) {
-            System.out.println("❌ Serviço não encontrado.");
-            return;
+            return false;
         }
 
         BancoDados.agendamentos.add(new Agendamento(nomeServico, nomeDono, nomePet, dataHora));
-        System.out.println("✅ Agendamento registrado com sucesso!");
+        return true;
+    }
+
+    public void listarAgendamentosComStatus() {
+        System.out.println("\n📋 Lista de Agendamentos:");
+
+        if (BancoDados.agendamentos.isEmpty()) {
+            System.out.println("⚠️ Nenhum agendamento encontrado.");
+            return;
+        }
+
+        int contador = 1;
+        for (Agendamento ag : BancoDados.agendamentos) {
+            System.out.println(contador++ + " - Serviço: " + ag.getNomeServico()
+                    + " | Tutor: " + ag.getNomeDono()
+                    + " | Pet: " + ag.getNomePet()
+                    + " | Data/Hora: " + ag.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                    + " | Status: " + ag.getStatus());
+        }
     }
 }

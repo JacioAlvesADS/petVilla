@@ -63,7 +63,7 @@
 ]]></system-out>
   </testcase>
   <testcase name="testCadastrarDono" classname="service.CadastroServiceTest" time="0.006">
-    <system-out><![CDATA[✅ Dono cadastrado com sucesso!
+    <system-out><![CDATA[✅ Tutor cadastrado com sucesso!
 ]]></system-out>
   </testcase>
 </testsuite>
