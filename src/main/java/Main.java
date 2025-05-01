@@ -10,12 +10,26 @@ import service.CadastroService;
 import service.ServicoManager;
 
 public class Main {
+    public static void limparConsole() {
+        try {
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
+            } else {
+                System.out.print("\033[H\033[2J");
+                System.out.flush();
+            }
+        } catch (Exception e) {
+            System.out.println("Não foi possível limpar o console.");
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         ServicoManager servicoManager = new ServicoManager();
 
         int opcaoPrincipal;
         do {
+            limparConsole();
             System.out.println("\n🐾 Sistema de Agendamento - Petshop 🐾");
             System.out.println("1 - Acesso como Cliente");
             System.out.println("2 - Acesso como Funcionário/Admin");
@@ -46,6 +60,7 @@ public class Main {
     public static void menuCliente(Scanner scanner, ServicoManager servicoManager) {
         int opcao;
         do {
+            limparConsole();
             System.out.println("\n👤 Menu Cliente");
             System.out.println("1 - Cadastrar Tutor");
             System.out.println("2 - Cadastrar Pet");
@@ -69,6 +84,8 @@ public class Main {
                     System.out.print("Endereço: ");
                     String endereco = scanner.nextLine();
                     CadastroService.cadastrarDono(new Dono(nome, email, telefone, endereco));
+                    System.out.println("\nPressione Enter para continuar...");
+                    scanner.nextLine();  // <— pausa para ler a mensagem
                     break;
 
                 case 2:
@@ -84,14 +101,20 @@ public class Main {
                     System.out.print("Histórico Médico (opcional): ");
                     String historico = scanner.nextLine();
                     CadastroService.cadastrarPet(new Pet(nomePet, especie, raca, idade, historico));
+                    System.out.println("\nPressione Enter para continuar...");
+                    scanner.nextLine();  // <— pausa para ler a mensagem
                     break;
 
                 case 3:
                     CadastroService.listarDonos();
+                    System.out.println("\nPressione Enter para continuar...");
+                    scanner.nextLine();
                     break;
 
                 case 4:
                     CadastroService.listarPets();
+                    System.out.println("\nPressione Enter para continuar...");
+                    scanner.nextLine();  // pausa para o usuário ler
                     break;
 
                 case 5:
@@ -134,6 +157,7 @@ public class Main {
     public static void menuFuncionario(Scanner scanner, ServicoManager servicoManager) {
         int opcao;
         do {
+            limparConsole();
             System.out.println("\n🛠️ Menu Funcionário/Admin");
             System.out.println("1 - Cadastrar Serviço");
             System.out.println("2 - Editar Serviço");
@@ -178,6 +202,8 @@ public class Main {
 
                 case 4:
                     servicoManager.listarServicos();
+                    System.out.println("\nPressione Enter para continuar...");
+                    scanner.nextLine();
                     break;
 
                 case 5:
@@ -230,3 +256,8 @@ public class Main {
         } while (opcao != 0);
     }
 }
+
+
+// O consultar status deveria listar em ordem numerica para o usuario escolher qual servico quer alterar o status. Depois disso, ele deveria perguntar o novo status
+
+// ao agendar um servico, ele deveria listar os servicos para o usuario selecionar e depois perguntar o dono e o pet. Pois basicamente o sistema permite que eu possa agendar um servico que nao existe, o que eh um erro. Alem disso, ele nao da o feedback de que o servico foi agendado com sucesso.
