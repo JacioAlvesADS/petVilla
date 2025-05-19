@@ -47,33 +47,37 @@ public class ServicoManager {
         }
     }
 
-    public void editarServico(String nome, double novoPreco, int novaDuracao) {
-        for (Servico s : BancoDados.servicos) {
-            if (s.getNome().equalsIgnoreCase(nome)) {
-                s.setPreco(novoPreco);
-                s.setDuracaoMinutos(novaDuracao);
-                System.out.println("✅ Serviço atualizado com sucesso!");
-                return;
-            }
+    public void editarServico(int indice, double novoPreco, int novaDuracao) {
+        if (indice < 1 || indice > BancoDados.servicos.size()) {
+            System.out.println("❌ Índice inválido.");
+            return;
         }
-        System.out.println("❌ Serviço não encontrado.");
+
+        Servico s = BancoDados.servicos.get(indice - 1);
+        s.setPreco(novoPreco);
+        s.setDuracaoMinutos(novaDuracao);
+        System.out.println("✅ Serviço atualizado com sucesso!");
     }
 
-    public void excluirServico(String nome) {
-        for (Servico s : BancoDados.servicos) {
-            if (s.getNome().equalsIgnoreCase(nome)) {
-                boolean temAgendamentos = BancoDados.agendamentos.stream()
-                        .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(nome));
-                if (temAgendamentos) {
-                    System.out.println("❌ Este serviço possui agendamentos futuros e não pode ser excluído.");
-                    return;
-                }
-                BancoDados.servicos.remove(s);
-                System.out.println("✅ Serviço excluído com sucesso.");
-                return;
-            }
+    public void excluirServico(int indice) {
+        if (indice < 1 || indice > BancoDados.servicos.size()) {
+            System.out.println("❌ Índice inválido.");
+            return;
         }
-        System.out.println("❌ Serviço não encontrado.");
+
+        Servico s = BancoDados.servicos.get(indice - 1);
+
+        boolean temAgendamentosAtivos = BancoDados.agendamentos.stream()
+                .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()) &&
+                        a.getStatus() != StatusServico.FINALIZADO);
+
+        if (temAgendamentosAtivos) {
+            System.out.println("❌ Este serviço ainda possui agendamentos não finalizados e não pode ser excluído.");
+            return;
+        }
+
+        BancoDados.servicos.remove(s);
+        System.out.println("✅ Serviço excluído com sucesso.");
     }
 
     public void listarServicos() {
@@ -124,6 +128,21 @@ public class ServicoManager {
                     + " | Pet: " + ag.getNomePet()
                     + " | Data/Hora: " + ag.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
                     + " | Status: " + ag.getStatus());
+        }
+    }
+
+    public void listarServicosNumerados() {
+        System.out.println("\n📋 Serviços cadastrados:");
+        if (BancoDados.servicos.isEmpty()) {
+            System.out.println("⚠️ Nenhum serviço cadastrado.");
+            return;
+        }
+
+        for (int i = 0; i < BancoDados.servicos.size(); i++) {
+            Servico s = BancoDados.servicos.get(i);
+            System.out.println((i + 1) + ". Serviço: " + s.getNome()
+                    + " | Preço: R$" + s.getPreco()
+                    + " | Duração: " + s.getDuracaoMinutos() + " min");
         }
     }
 }
