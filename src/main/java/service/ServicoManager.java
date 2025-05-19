@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import model.Agendamento;
 import model.Servico;
 import model.StatusServico;
+import java.time.format.DateTimeFormatter;
 
 public class ServicoManager {
 
@@ -17,61 +18,66 @@ public class ServicoManager {
         System.out.println("✅ Serviço cadastrado com sucesso!");
     }
 
-    public void atualizarStatusAgendamento(String nomeDono, String nomePet, LocalDateTime dataHora, StatusServico novoStatus) {
-    for (Agendamento agendamento : BancoDados.agendamentos) {
-        if (agendamento.getNomeDono().equalsIgnoreCase(nomeDono) &&
-            agendamento.getNomePet().equalsIgnoreCase(nomePet) &&
-            agendamento.getDataHora().equals(dataHora)) {
-            agendamento.setStatus(novoStatus);
-            System.out.println("✅ Status atualizado com sucesso!");
-            return;
+    public void atualizarStatusAgendamento(String nomeDono, String nomePet, LocalDateTime dataHora,
+            StatusServico novoStatus) {
+        for (Agendamento agendamento : BancoDados.agendamentos) {
+            if (agendamento.getNomeDono().equalsIgnoreCase(nomeDono) &&
+                    agendamento.getNomePet().equalsIgnoreCase(nomePet) &&
+                    agendamento.getDataHora().equals(dataHora)) {
+                agendamento.setStatus(novoStatus);
+                System.out.println("✅ Status atualizado com sucesso!");
+                return;
+            }
         }
+        System.out.println("❌ Agendamento não encontrado.");
     }
-    System.out.println("❌ Agendamento não encontrado.");
-}
 
     public void consultarStatusAgendamento(String nomeDono, String nomePet) {
         boolean encontrou = false;
         System.out.println("\n📋 Status dos Agendamentos:");
         for (Agendamento agendamento : BancoDados.agendamentos) {
             if (agendamento.getNomeDono().equalsIgnoreCase(nomeDono) &&
-                agendamento.getNomePet().equalsIgnoreCase(nomePet)) {
+                    agendamento.getNomePet().equalsIgnoreCase(nomePet)) {
                 System.out.println(agendamento);
                 encontrou = true;
-        }
-    }
-            if (!encontrou) {
-                System.out.println("❌ Nenhum agendamento encontrado para este dono e pet.");
-    }
-}
-
-    public void editarServico(String nome, double novoPreco, int novaDuracao) {
-        for (Servico s : BancoDados.servicos) {
-            if (s.getNome().equalsIgnoreCase(nome)) {
-                s.setPreco(novoPreco);
-                s.setDuracaoMinutos(novaDuracao);
-                System.out.println("✅ Serviço atualizado com sucesso!");
-                return;
             }
         }
-        System.out.println("❌ Serviço não encontrado.");
+        if (!encontrou) {
+            System.out.println("❌ Nenhum agendamento encontrado para este dono e pet.");
+        }
     }
 
-    public void excluirServico(String nome) {
-        for (Servico s : BancoDados.servicos) {
-            if (s.getNome().equalsIgnoreCase(nome)) {
-                boolean temAgendamentos = BancoDados.agendamentos.stream()
-                    .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(nome));
-                if (temAgendamentos) {
-                    System.out.println("❌ Este serviço possui agendamentos futuros e não pode ser excluído.");
-                    return;
-                }
-                BancoDados.servicos.remove(s);
-                System.out.println("✅ Serviço excluído com sucesso.");
-                return;
-            }
+    public void editarServico(int indice, double novoPreco, int novaDuracao) {
+        if (indice < 1 || indice > BancoDados.servicos.size()) {
+            System.out.println("❌ Índice inválido.");
+            return;
         }
-        System.out.println("❌ Serviço não encontrado.");
+
+        Servico s = BancoDados.servicos.get(indice - 1);
+        s.setPreco(novoPreco);
+        s.setDuracaoMinutos(novaDuracao);
+        System.out.println("✅ Serviço atualizado com sucesso!");
+    }
+
+    public void excluirServico(int indice) {
+        if (indice < 1 || indice > BancoDados.servicos.size()) {
+            System.out.println("❌ Índice inválido.");
+            return;
+        }
+
+        Servico s = BancoDados.servicos.get(indice - 1);
+
+        boolean temAgendamentosAtivos = BancoDados.agendamentos.stream()
+                .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()) &&
+                        a.getStatus() != StatusServico.FINALIZADO);
+
+        if (temAgendamentosAtivos) {
+            System.out.println("❌ Este serviço ainda possui agendamentos não finalizados e não pode ser excluído.");
+            return;
+        }
+
+        BancoDados.servicos.remove(s);
+        System.out.println("✅ Serviço excluído com sucesso.");
     }
 
     public void listarServicos() {
@@ -82,12 +88,12 @@ public class ServicoManager {
             for (Servico s : BancoDados.servicos) {
                 System.out.println(s);
                 boolean temAgendamentos = BancoDados.agendamentos.stream()
-                    .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()));
+                        .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()));
                 if (temAgendamentos) {
                     System.out.println("🔔 Agendamentos:");
                     BancoDados.agendamentos.stream()
-                        .filter(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()))
-                        .forEach(a -> System.out.println("   - " + a));
+                            .filter(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()))
+                            .forEach(a -> System.out.println("   - " + a));
                 } else {
                     System.out.println("   (Sem agendamentos)");
                 }
@@ -95,16 +101,48 @@ public class ServicoManager {
         }
     }
 
-    public void adicionarAgendamento(String nomeServico, String nomeDono, String nomePet, LocalDateTime dataHora) {
+    public boolean adicionarAgendamento(String nomeServico, String nomeDono, String nomePet, LocalDateTime dataHora) {
         boolean servicoExiste = BancoDados.servicos.stream()
                 .anyMatch(s -> s.getNome().equalsIgnoreCase(nomeServico));
 
         if (!servicoExiste) {
-            System.out.println("❌ Serviço não encontrado.");
-            return;
+            return false;
         }
 
         BancoDados.agendamentos.add(new Agendamento(nomeServico, nomeDono, nomePet, dataHora));
-        System.out.println("✅ Agendamento registrado com sucesso!");
+        return true;
+    }
+
+    public void listarAgendamentosComStatus() {
+        System.out.println("\n📋 Lista de Agendamentos:");
+
+        if (BancoDados.agendamentos.isEmpty()) {
+            System.out.println("⚠️ Nenhum agendamento encontrado.");
+            return;
+        }
+
+        int contador = 1;
+        for (Agendamento ag : BancoDados.agendamentos) {
+            System.out.println(contador++ + " - Serviço: " + ag.getNomeServico()
+                    + " | Tutor: " + ag.getNomeDono()
+                    + " | Pet: " + ag.getNomePet()
+                    + " | Data/Hora: " + ag.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+                    + " | Status: " + ag.getStatus());
+        }
+    }
+
+    public void listarServicosNumerados() {
+        System.out.println("\n📋 Serviços cadastrados:");
+        if (BancoDados.servicos.isEmpty()) {
+            System.out.println("⚠️ Nenhum serviço cadastrado.");
+            return;
+        }
+
+        for (int i = 0; i < BancoDados.servicos.size(); i++) {
+            Servico s = BancoDados.servicos.get(i);
+            System.out.println((i + 1) + ". Serviço: " + s.getNome()
+                    + " | Preço: R$" + s.getPreco()
+                    + " | Duração: " + s.getDuracaoMinutos() + " min");
+        }
     }
 }

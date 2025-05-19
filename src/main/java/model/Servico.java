@@ -24,6 +24,6 @@ public class Servico {
 
     @Override
     public String toString() {
-        return "Serviço: " + nome + ", Preço: R$" + preco + ", Duração: " + duracaoMinutos + " min";
+        return "Serviço: " + nome + " | Preço: R$" + preco + " | Duração: " + duracaoMinutos + " min";
     }
 }
