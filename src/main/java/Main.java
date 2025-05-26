@@ -1,3 +1,4 @@
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
@@ -12,6 +13,15 @@ import service.CadastroService;
 import service.ServicoManager;
 
 public class Main {
+    static {
+        try {
+            System.setProperty("file.encoding", "UTF-8");
+            System.setProperty("console.encoding", "UTF-8");
+        } catch (Exception e) {
+            System.err.println("Erro ao configurar encoding: " + e.getMessage());
+        }
+    }
+
     public static void limparConsole() {
         try {
             if (System.getProperty("os.name").contains("Windows")) {
@@ -26,13 +36,13 @@ public class Main {
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = new Scanner(System.in, StandardCharsets.UTF_8.name());
         ServicoManager servicoManager = new ServicoManager();
 
         int opcaoPrincipal;
         do {
             limparConsole();
-            System.out.println("\n🐾 Sistema de Agendamento - Petshop 🐾");
+            System.out.println("\n=== Sistema de Agendamento - Petshop ===");
             System.out.println("1 - Acesso como Cliente");
             System.out.println("2 - Acesso como Funcionário/Admin");
             System.out.println("0 - Sair");
@@ -48,10 +58,10 @@ public class Main {
                     menuFuncionario(scanner, servicoManager);
                     break;
                 case 0:
-                    System.out.println("👋 Saindo...");
+                    System.out.println("Saindo...");
                     break;
                 default:
-                    System.out.println("❌ Opção inválida.");
+                    System.out.println("(X) Opção inválida.");
             }
 
         } while (opcaoPrincipal != 0);
@@ -63,7 +73,7 @@ public class Main {
         int opcao;
         do {
             limparConsole();
-            System.out.println("\n👤 Menu Cliente");
+            System.out.println("\n=== Menu Cliente ===");
             System.out.println("1 - Cadastrar Tutor");
             System.out.println("2 - Cadastrar Pet");
             System.out.println("3 - Listar Tutores");
@@ -86,8 +96,9 @@ public class Main {
                     System.out.print("Endereço: ");
                     String endereco = scanner.nextLine();
                     CadastroService.cadastrarDono(new Dono(nome, email, telefone, endereco));
+                    BancoDados.salvarDados();
                     System.out.println("\nPressione Enter para continuar...");
-                    scanner.nextLine(); // <— pausa para ler a mensagem
+                    scanner.nextLine();
                     break;
 
                 case 2:
@@ -103,8 +114,9 @@ public class Main {
                     System.out.print("Histórico Médico (opcional): ");
                     String historico = scanner.nextLine();
                     CadastroService.cadastrarPet(new Pet(nomePet, especie, raca, idade, historico));
+                    BancoDados.salvarDados();
                     System.out.println("\nPressione Enter para continuar...");
-                    scanner.nextLine(); // <— pausa para ler a mensagem
+                    scanner.nextLine();
                     break;
 
                 case 3:
@@ -116,29 +128,28 @@ public class Main {
                 case 4:
                     CadastroService.listarPets();
                     System.out.println("\nPressione Enter para continuar...");
-                    scanner.nextLine(); // pausa para o usuário ler
+                    scanner.nextLine();
                     break;
 
                 case 5:
                     if (BancoDados.servicos.isEmpty()) {
-                        System.out.println("⚠️ Nenhum serviço disponível para agendamento.");
+                        System.out.println("(!) Nenhum serviço disponível para agendamento.");
                         System.out.println("\nPressione Enter para continuar...");
                         scanner.nextLine();
                         break;
                     }
 
-                    System.out.println("\n📋 Serviços disponíveis:");
+                    System.out.println("\n=== Serviços disponíveis ===");
                     for (int i = 0; i < BancoDados.servicos.size(); i++) {
                         System.out.println((i + 1) + " - " + BancoDados.servicos.get(i));
                     }
 
                     System.out.print("\nEscolha o número do serviço: ");
                     int indiceServico = scanner.nextInt();
-                    scanner.nextLine(); // consumir quebra de linha
+                    scanner.nextLine();
 
-                    // Validação
                     if (indiceServico < 1 || indiceServico > BancoDados.servicos.size()) {
-                        System.out.println("❌ Número inválido.");
+                        System.out.println("(X) Número inválido.");
                         System.out.println("\nPressione Enter para continuar...");
                         scanner.nextLine();
                         break;
@@ -146,7 +157,6 @@ public class Main {
 
                     String nomeServicoEscolhido = BancoDados.servicos.get(indiceServico - 1).getNome();
 
-                    // Dados do agendamento
                     System.out.print("Nome do Tutor: ");
                     String donoAgendamento = scanner.nextLine();
 
@@ -162,9 +172,10 @@ public class Main {
 
                         servicoManager.adicionarAgendamento(nomeServicoEscolhido, donoAgendamento, petAgendamento,
                                 dataHora);
-                        System.out.println("\n✅ Agendamento feito com sucesso!");
+                        BancoDados.salvarDados();
+                        System.out.println("\n(+) Agendamento feito com sucesso!");
                     } catch (DateTimeParseException e) {
-                        System.out.println("❌ Data/Hora inválida. Use o formato: dd/MM/yyyy HH:mm");
+                        System.out.println("(X) Data/Hora inválida. Use o formato: dd/MM/yyyy HH:mm");
                     }
 
                     System.out.println("\nPressione Enter para continuar...");
@@ -181,7 +192,7 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("❌ Opção inválida.");
+                    System.out.println("(X) Opção inválida.");
             }
 
         } while (opcao != 0);
@@ -191,7 +202,7 @@ public class Main {
         int opcao;
         do {
             limparConsole();
-            System.out.println("\n🛠️ Menu Funcionário/Admin");
+            System.out.println("\n=== Menu Funcionário/Admin ===");
             System.out.println("1 - Cadastrar Serviço");
             System.out.println("2 - Editar Serviço");
             System.out.println("3 - Excluir Serviço");
@@ -201,7 +212,6 @@ public class Main {
             System.out.print("Escolha uma opção: ");
             opcao = scanner.nextInt();
             scanner.nextLine();
-
 
             switch (opcao) {
                 case 1:
@@ -215,26 +225,27 @@ public class Main {
                     int duracao = scanner.nextInt();
                     scanner.nextLine();
                     servicoManager.cadastrarServico(nomeServico, descricao, preco, duracao);
+                    BancoDados.salvarDados();
                     System.out.println("\nPressione Enter para continuar...");
                     scanner.nextLine();
                     break;
 
                 case 2:
                     if (BancoDados.servicos.isEmpty()) {
-                        System.out.println("⚠️ Nenhum serviço cadastrado.");
+                        System.out.println("(!) Nenhum serviço cadastrado.");
                         System.out.println("\nPressione Enter para continuar...");
                         scanner.nextLine();
                         break;
                     }
 
-                    System.out.println("\n📋 Serviços cadastrados:");
+                    System.out.println("\n=== Serviços cadastrados ===");
                     for (int i = 0; i < BancoDados.servicos.size(); i++) {
                         System.out.println((i + 1) + " - " + BancoDados.servicos.get(i));
                     }
 
                     System.out.print("\nEscolha o número do serviço a editar: ");
                     int indiceEditar = scanner.nextInt();
-                    scanner.nextLine(); // consumir quebra de linha
+                    scanner.nextLine();
 
                     System.out.print("Novo Preço (R$): ");
                     double novoPreco = scanner.nextDouble();
@@ -244,19 +255,20 @@ public class Main {
                     scanner.nextLine();
 
                     servicoManager.editarServico(indiceEditar, novoPreco, novaDuracao);
+                    BancoDados.salvarDados();
                     System.out.println("\nPressione Enter para continuar...");
                     scanner.nextLine();
                     break;
 
                 case 3:
                     if (BancoDados.servicos.isEmpty()) {
-                        System.out.println("⚠️ Nenhum serviço cadastrado.");
+                        System.out.println("(!) Nenhum serviço cadastrado.");
                         System.out.println("\nPressione Enter para continuar...");
                         scanner.nextLine();
                         break;
                     }
 
-                    System.out.println("\n📋 Lista de Serviços:");
+                    System.out.println("\n=== Lista de Serviços ===");
                     for (int i = 0; i < BancoDados.servicos.size(); i++) {
                         System.out.println((i + 1) + ". " + BancoDados.servicos.get(i));
                     }
@@ -278,13 +290,13 @@ public class Main {
 
                 case 5:
                     if (BancoDados.agendamentos.isEmpty()) {
-                        System.out.println("⚠️ Nenhum agendamento disponível.");
+                        System.out.println("(!) Nenhum agendamento disponível.");
                         System.out.println("\nPressione Enter para continuar...");
                         scanner.nextLine();
                         break;
                     }
 
-                    System.out.println("\n📋 Lista de Agendamentos:");
+                    System.out.println("\n=== Lista de Agendamentos ===");
                     for (int i = 0; i < BancoDados.agendamentos.size(); i++) {
                         System.out.println((i + 1) + " - " + BancoDados.agendamentos.get(i));
                     }
@@ -294,7 +306,7 @@ public class Main {
                     scanner.nextLine();
 
                     if (indiceAgendamento < 1 || indiceAgendamento > BancoDados.agendamentos.size()) {
-                        System.out.println("❌ Número inválido.");
+                        System.out.println("(X) Número inválido.");
                         System.out.println("\nPressione Enter para continuar...");
                         scanner.nextLine();
                         break;
@@ -321,14 +333,15 @@ public class Main {
                             novoStatus = StatusServico.FINALIZADO;
                             break;
                         default:
-                            System.out.println("❌ Opção inválida.");
+                            System.out.println("(X) Opção inválida.");
                             System.out.println("\nPressione Enter para continuar...");
                             scanner.nextLine();
                             break;
                     }
 
                     ag.setStatus(novoStatus);
-                    System.out.println("\n✅ Status atualizado com sucesso!");
+                    BancoDados.salvarDados();
+                    System.out.println("\n(+) Status atualizado com sucesso!");
                     System.out.println("\nPressione Enter para continuar...");
                     scanner.nextLine();
                     break;
@@ -337,7 +350,7 @@ public class Main {
                     break;
 
                 default:
-                    System.out.println("❌ Opção inválida.");
+                    System.out.println("(X) Opção inválida.");
                     System.out.println("\nPressione Enter para continuar...");
                     scanner.nextLine();
                     return;
