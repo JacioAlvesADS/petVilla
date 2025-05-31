@@ -16,29 +16,46 @@ public class CadastroService {
     }
 
     public static void listarDonos() {
-        BancoDados.carregarDados();
-        
-        System.out.println("\n=== Lista de Donos ===");
+        System.out.println("\n┌────────────────────────────┐");
+        System.out.println("│      TUTORES CADASTRADOS   │");
+        System.out.println("└────────────────────────────┘");
+
         if (BancoDados.donos.isEmpty()) {
-            System.out.println("(!) Nenhum tutor cadastrado.");
-        } else {
-            for (int i = 0; i < BancoDados.donos.size(); i++) {
-                System.out.println((i + 1) + " - " + BancoDados.donos.get(i));
-            }
+            System.out.println("⚠️ Nenhum tutor cadastrado.");
+            return;
+        }
+
+        for (int i = 0; i < BancoDados.donos.size(); i++) {
+            Dono d = BancoDados.donos.get(i);
+            System.out.println("👤 ID: " + (i + 1));
+            System.out.println("│ Nome: " + d.getNome());
+            System.out.println("│ Email: " + d.getEmail());
+            System.out.println("│ Telefone: " + d.getTelefone());
+            System.out.println("│ Endereço: " + d.getEndereco());
+            System.out.println("├────────────────────────────┤");
         }
     }
 
     public static void listarPets() {
-        BancoDados.carregarDados();
-        
-        System.out.println("\n=== Lista de Pets ===");
+        System.out.println("\n┌───────────────────────────┐");
+        System.out.println("│      PETS CADASTRADOS     │");
+        System.out.println("└───────────────────────────┘");
+
         if (BancoDados.pets.isEmpty()) {
-            System.out.println("(!) Nenhum pet cadastrado.");
-        } else {
-            for (int i = 0; i < BancoDados.pets.size(); i++) {
-                Pet p = BancoDados.pets.get(i);
-                System.out.println((i + 1) + " - " + p);
-            }
+            System.out.println("⚠️ Nenhum pet cadastrado.");
+            return;
+        }
+
+        for (int i = 0; i < BancoDados.pets.size(); i++) {
+            Pet p = BancoDados.pets.get(i);
+            System.out.println("🐾 ID: " + (i + 1));
+            System.out.println("│ Nome: " + p.getNome());
+            System.out.println("│ Espécie: " + p.getEspecie());
+            System.out.println("│ Raça: " + p.getRaca());
+            System.out.println("│ Idade: " + p.getIdade() + " anos");
+            System.out
+                    .println("│ Histórico: " + (p.getHistoricoMedico().isEmpty() ? "Nenhum" : p.getHistoricoMedico()));
+            System.out.println("├───────────────────────────┤");
         }
     }
 }

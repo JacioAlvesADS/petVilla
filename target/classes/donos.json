@@ -1,1 +1,14 @@
-[]
+[
+  {
+    "nome": "jo",
+    "email": "j",
+    "telefone": "j",
+    "endereco": "j"
+  },
+  {
+    "nome": "pitoca",
+    "email": "pitoca@gmail.com",
+    "telefone": "819129831293",
+    "endereco": "avenida pitoca"
+  }
+]

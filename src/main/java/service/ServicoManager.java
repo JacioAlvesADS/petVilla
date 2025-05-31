@@ -83,23 +83,23 @@ public class ServicoManager {
     }
 
     public void listarServicos() {
-        System.out.println("\n=== Lista de Serviços ===");
+        System.out.println("\n┌───────────────────────────┐");
+        System.out.println("│    SERVIÇOS CADASTRADOS   │");
+        System.out.println("└───────────────────────────┘");
+
         if (BancoDados.servicos.isEmpty()) {
-            System.out.println("(!) Nenhum serviço cadastrado.");
-        } else {
-            for (Servico s : BancoDados.servicos) {
-                System.out.println(s);
-                boolean temAgendamentos = BancoDados.agendamentos.stream()
-                        .anyMatch(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()));
-                if (temAgendamentos) {
-                    System.out.println(">>> Agendamentos:");
-                    BancoDados.agendamentos.stream()
-                            .filter(a -> a.getNomeServico().equalsIgnoreCase(s.getNome()))
-                            .forEach(a -> System.out.println("   - " + a));
-                } else {
-                    System.out.println("   (Sem agendamentos)");
-                }
-            }
+            System.out.println("⚠️ Nenhum serviço cadastrado.");
+            return;
+        }
+
+        for (int i = 0; i < BancoDados.servicos.size(); i++) {
+            Servico s = BancoDados.servicos.get(i);
+            System.out.println("🛠️ ID: " + (i + 1));
+            System.out.println("│ Nome: " + s.getNome());
+            System.out.println("│ Descrição: " + s.getDescricao());
+            System.out.println("│ Preço: R$" + s.getPreco());
+            System.out.println("│ Duração: " + s.getDuracaoMinutos() + " min");
+            System.out.println("├───────────────────────────┤");
         }
     }
 
@@ -116,20 +116,25 @@ public class ServicoManager {
     }
 
     public void listarAgendamentosComStatus() {
-        System.out.println("\n=== Lista de Agendamentos ===");
+        System.out.println("\n┌────────────────────────────┐");
+        System.out.println("│    AGENDAMENTOS CADASTRADOS│");
+        System.out.println("└────────────────────────────┘");
 
         if (BancoDados.agendamentos.isEmpty()) {
-            System.out.println("(!) Nenhum agendamento encontrado.");
+            System.out.println("⚠️ Nenhum agendamento cadastrado.");
             return;
         }
 
-        int contador = 1;
-        for (Agendamento ag : BancoDados.agendamentos) {
-            System.out.println(contador++ + " - Serviço: " + ag.getNomeServico()
-                    + " | Tutor: " + ag.getNomeDono()
-                    + " | Pet: " + ag.getNomePet()
-                    + " | Data/Hora: " + ag.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
-                    + " | Status: " + ag.getStatus());
+        for (int i = 0; i < BancoDados.agendamentos.size(); i++) {
+            Agendamento a = BancoDados.agendamentos.get(i);
+            System.out.println("📅 ID: " + (i + 1));
+            System.out.println("│ Serviço: " + a.getNomeServico());
+            System.out.println("│ Dono: " + a.getNomeDono());
+            System.out.println("│ Pet: " + a.getNomePet());
+            System.out
+                    .println("│ Data/Hora: " + a.getDataHora().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm")));
+            System.out.println("│ Status: " + a.getStatus());
+            System.out.println("├────────────────────────────┤");
         }
     }
 
