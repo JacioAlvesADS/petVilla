@@ -1,15 +1,1 @@
-database\JsonStorage$3.class
-database\LocalDateTimeAdapter.class
-database\BancoDados.class
-database\JsonStorage.class
-database\JsonStorage$2.class
-model\Servico.class
-model\Agendamento.class
-model\StatusServico.class
 Main.class
-database\JsonStorage$1.class
-model\Dono.class
-model\Pet.class
-service\CadastroService.class
-database\JsonStorage$4.class
-service\ServicoManager.class
