@@ -22,19 +22,11 @@ import model.Pet;
 import model.Servico;
 
 public class JsonStorage {
-    private static final String RESOURCES_PATH = "src/main/resources/";
+    private static final String RESOURCES_PATH = "petVilla/data/";
     private static final Gson gson = new GsonBuilder()
             .setPrettyPrinting()
             .registerTypeAdapter(LocalDateTime.class, new LocalDateTimeAdapter())
             .create();
-
-    static {
-        try {
-            Files.createDirectories(Paths.get(RESOURCES_PATH));
-        } catch (IOException e) {
-            System.err.println("Erro ao criar diretório de recursos: " + e.getMessage());
-        }
-    }
 
     public static void salvarDonos(List<Dono> donos) {
         salvarParaArquivo(donos, RESOURCES_PATH + "donos.json");
