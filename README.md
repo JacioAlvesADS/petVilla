@@ -17,7 +17,7 @@ O projeto tem como finalidade facilitar o agendamento de serviços para pets em 
 
 ## 📐 Diagrama de Classes
 
-![Diagrama de Classes do Sistema PetVilla](/petVilla/images/DiagramaClasses4.png)
+![Diagrama de Classes do Sistema PetVilla](/petVilla/images/DiagramaClassesEntrega4.png)
 
 _Diagrama mostra as relações entre Dono, Pet, Serviço, Agendamento e as classes de serviço._
 
