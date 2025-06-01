@@ -187,5 +187,8 @@ _Diagrama mostra as relações entre Dono, Pet, Serviço, Agendamento e as class
 [Assista no Youtube (Entrega 3)](https://youtu.be/zvVJmO5BLzQ)
 (0 a 1:35: Screencast das novas histórias. 1:35 até o final: Screencast testes unitários)
 
+[Assista no Youtube (Entrega 4)](https://youtu.be/g6S83v9bdp0?si=4Ff-k8ce0GDdEIlN)
+(0 a 1:10: Screencast do banco de dados. 1:10 até o final: Screencast testes automatizdos)
+
 
 📌 **Este documento será atualizado conforme o desenvolvimento do projeto.**
