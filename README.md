@@ -13,6 +13,35 @@
 
 O projeto tem como finalidade facilitar o agendamento de serviços para pets em petshops, permitindo que donos de animais possam se cadastrar, visualizar agendamentos, acompanhar o status dos serviços e realizar cancelamentos. Além disso, fornece funcionalidades para administradores e funcionários do petshop gerenciarem serviços e agendamentos.
 
+## 🛠️ Manual de Execução e Preparação do Ambiente
+
+Para executar e testar o projeto PetVilla, siga os passos abaixo:
+
+### Pré-requisitos
+
+* **Java Development Kit (JDK) 17 ou superior**: Certifique-se de ter o JDK instalado e configurado em sua máquina. Você pode verificar sua versão do Java com `java -version`.
+* **Apache Maven**: O Maven é utilizado para gerenciar as dependências do projeto e construir o executável. Verifique a instalação com `mvn -v`.
+
+### Configuração do Ambiente
+
+1.  **Clone o repositório:**
+    ```bash
+    git clone [https://github.com/jacioalvesads/petVilla.git](https://github.com/jacioalvesads/petVilla.git)
+    cd petVilla
+    ```
+
+2.  **Construa o projeto com Maven:**
+    Navegue até o diretório raiz do projeto (`petVilla`) e execute o seguinte comando para baixar as dependências e compilar o código:
+    ```bash
+    mvn clean install
+    ```
+    Este comando também criará o arquivo JAR executável na pasta `target/`.
+
+### Executando o Código
+
+Para iniciar a aplicação, execute o arquivo JAR gerado:
+
+java -jar target/petvilla-1.0-SNAPSHOT.jar
 ---
 
 ## 📐 Diagrama de Classes
