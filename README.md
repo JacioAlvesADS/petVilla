@@ -30,12 +30,13 @@ Para executar e testar o projeto PetVilla, siga os passos abaixo:
     cd petVilla
     ```
 
-2.  **Construa o projeto com Maven:**
-    Navegue até o diretório raiz do projeto (`petVilla`) e execute o seguinte comando para baixar as dependências e compilar o código:
+2.  **Executando os Testes:**
+    O projeto inclui testes unitários e de integração para garantir a funcionalidade. Para executá-los, utilize o Maven:
     ```bash
-    mvn clean install
+    mvn test
     ```
-    Este comando também criará o arquivo JAR executável na pasta `target/`.
+    Após a execução, os relatórios dos testes serão gerados na pasta `target/surefire-reports/`.
+
 
 ### Executando o Código
 
